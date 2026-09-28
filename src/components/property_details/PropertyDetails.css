@@ -1,0 +1,350 @@
+/* ==========================================================================
+   Property Details Wizard - Complete Clean Styles
+   ========================================================================== */
+
+/* 1. Grid Rows & Field Containers */
+.pd-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px;
+  margin-bottom: 24px;
+}
+
+@media (max-width: 768px) {
+  .pd-row {
+    grid-template-columns: 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+}
+
+/* 2. Modern Horizontal Input Field Card (Residential Rent etc.) */
+.pd-field-horizontal {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 18px;
+  padding: 14px 18px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.pd-field-horizontal:focus-within {
+  border-color: #006ce6;
+  box-shadow: 0 0 0 3.5px rgba(0, 108, 230, 0.12);
+  background: #fafcff;
+}
+
+.pd-field-horizontal.pd-full-width {
+  grid-column: 1 / -1;
+}
+
+.pd-field-icon-block {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #006ce6;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.pd-field-icon-block svg {
+  width: 20px;
+  height: 20px;
+}
+
+.pd-field-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+  gap: 4px;
+}
+
+/* 3. Labels & Required indicators */
+.pd-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  margin-bottom: 2px;
+}
+
+.pd-required {
+  color: #ef4444;
+  font-weight: 800;
+}
+
+/* 4. Dropdowns / Select Wrappers */
+.pd-select-wrapper-new {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.pd-select-wrapper-new select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  appearance: none;
+  padding-right: 28px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.pd-select-wrapper-new select option {
+  color: #0f172a;
+  background: #ffffff;
+  padding: 8px;
+}
+
+.pd-select-arrow {
+  position: absolute;
+  right: 2px;
+  pointer-events: none;
+  color: #64748b;
+  width: 16px;
+  height: 16px;
+}
+
+/* 5. Inputs with Suffix / Prefix */
+.pd-input-with-suffix-new {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.pd-input-with-suffix-new input {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  font-family: inherit;
+}
+
+.pd-suffix-new {
+  font-size: 12px;
+  font-weight: 700;
+  color: #006ce6;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  padding: 3px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+/* 6. Standard Vertical Fields */
+.pd-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+}
+
+.pd-select-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 0 14px;
+  transition: all 0.2s ease;
+}
+
+.pd-select-wrapper:focus-within {
+  border-color: #006ce6;
+  box-shadow: 0 0 0 3.5px rgba(0, 108, 230, 0.12);
+  background: #fafcff;
+}
+
+.pd-select-wrapper select {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  appearance: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.pd-select-with-icon {
+  gap: 10px;
+}
+
+.pd-select-icon {
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.pd-input-with-suffix {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 0 14px;
+  transition: all 0.2s ease;
+}
+
+.pd-input-with-suffix:focus-within {
+  border-color: #006ce6;
+  box-shadow: 0 0 0 3.5px rgba(0, 108, 230, 0.12);
+  background: #fafcff;
+}
+
+.pd-input-with-suffix input {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  font-family: inherit;
+}
+
+.pd-input-with-icon-suffix {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 14px;
+  padding: 0 14px;
+  transition: all 0.2s ease;
+}
+
+.pd-input-with-icon-suffix:focus-within {
+  border-color: #006ce6;
+  box-shadow: 0 0 0 3.5px rgba(0, 108, 230, 0.12);
+  background: #fafcff;
+}
+
+.pd-prefix {
+  font-size: 15px;
+  font-weight: 700;
+  color: #006ce6;
+  margin-right: 8px;
+}
+
+.pd-input-with-icon-suffix input {
+  width: 100%;
+  padding: 12px 0;
+  border: none;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+  outline: none;
+  font-family: inherit;
+}
+
+.pd-suffix {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  margin-left: 8px;
+  white-space: nowrap;
+}
+
+/* 7. Toggle Buttons Group (Yes/No, Main Road etc.) */
+.pd-toggle-group {
+  display: flex;
+  gap: 12px;
+}
+
+.pd-toggle-btn {
+  padding: 10px 24px;
+  border-radius: 12px;
+  border: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pd-toggle-btn:hover {
+  border-color: #cbd5e1;
+  background: #f8fafc;
+}
+
+.pd-toggle-btn.active {
+  background: #eff6ff;
+  border-color: #3b82f6;
+  color: #006ce6;
+  box-shadow: 0 2px 8px rgba(0, 108, 230, 0.1);
+}
+
+/* 8. Action Buttons at the Bottom */
+.pd-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 1px solid #f1f5f9;
+}
+
+.pd-save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  background: #006ce6;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 14px rgba(0, 108, 230, 0.25);
+}
+
+.pd-save-btn:hover {
+  background: #005bb5;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(0, 108, 230, 0.35);
+}
+
+.pd-back-btn {
+  padding: 12px 32px;
+  background: #ffffff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #475569;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.pd-back-btn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
+}

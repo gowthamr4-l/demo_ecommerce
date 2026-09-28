@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>India DITS — System Workflows & Architecture Documentation</title>
+  
+  <!-- Typography & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --primary: #006ce6;
+      --primary-dark: #0052b3;
+      --primary-light: #eff6ff;
+      --secondary: #0b192c;
+      --accent: #10b981;
+      --accent-light: #ecfdf5;
+      --amber: #f59e0b;
+      --amber-light: #fffbeb;
+      --purple: #8b5cf6;
+      --purple-light: #f5f3ff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --bg-body: #f8fafc;
+      --bg-card: #ffffff;
+      --border-color: #e2e8f0;
+      --sidebar-width: 290px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-body);
+      color: var(--text-main);
+      line-height: 1.6;
+      display: flex;
+    }
+
+    /* Sidebar Navigation */
+    aside.sidebar {
+      width: var(--sidebar-width);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      background: linear-gradient(180deg, #006ce6 0%, #0056bd 60%, #004299 100%);
+      color: #ffffff;
+      padding: 26px 18px;
+      display: flex;
+      flex-direction: column;
+      border-right: 1px solid rgba(255, 255, 255, 0.15);
+      overflow-y: auto;
+      flex-shrink: 0;
+      z-index: 100;
+      box-shadow: 4px 0 24px rgba(0, 108, 230, 0.15);
+    }
+
+    aside.sidebar::-webkit-scrollbar {
+      width: 5px;
+    }
+    aside.sidebar::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.25);
+      border-radius: 4px;
+    }
+
+    .brand-box {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding-bottom: 22px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: #ffffff;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 17px;
+      color: #006ce6;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2);
+    }
+
+    .brand-text h1 {
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: -0.4px;
+      color: #ffffff;
+      line-height: 1.1;
+    }
+
+    .brand-text p {
+      font-size: 10.5px;
+      color: #bfdbfe;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-top: 2px;
+    }
+
+    nav.toc {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    nav.toc .nav-group {
+      font-size: 10.5px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #bfdbfe;
+      opacity: 0.9;
+      margin-top: 18px;
+      margin-bottom: 6px;
+      padding-left: 10px;
+    }
+
+    nav.toc a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 12px;
+      color: #e0f2fe;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      border-radius: 10px;
+      transition: all 0.2s ease;
+    }
+
+    nav.toc a:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+      color: #ffffff;
+      transform: translateX(2px);
+    }
+
+    nav.toc a.active {
+      background-color: #ffffff;
+      color: #006ce6;
+      font-weight: 800;
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.16);
+      transform: translateX(3px);
+    }
+
+    /* Main Content Area */
+    main.content {
+      flex: 1;
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 40px 48px 120px;
+    }
+
+    header.doc-header {
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid var(--border-color);
+    }
+
+    .badge-bar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 11.5px;
+      font-weight: 700;
+      letter-spacing: 0.3px;
+    }
+
+    .badge.blue { background-color: var(--primary-light); color: var(--primary); border: 1px solid #bfdbfe; }
+    .badge.green { background-color: var(--accent-light); color: #059669; border: 1px solid #a7f3d0; }
+    .badge.amber { background-color: var(--amber-light); color: #d97706; border: 1px solid #fde68a; }
+    .badge.purple { background-color: var(--purple-light); color: #7c3aed; border: 1px solid #ddd6fe; }
+
+    h1.doc-title {
+      font-size: 32px;
+      font-weight: 900;
+      color: #0f172a;
+      letter-spacing: -0.8px;
+      margin-bottom: 8px;
+    }
+
+    p.doc-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    /* Section Styling */
+    section.workflow-section {
+      margin-bottom: 56px;
+      scroll-margin-top: 40px;
+    }
+
+    h2.section-heading {
+      font-size: 22px;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    h2.section-heading span.num {
+      width: 30px;
+      height: 30px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 900;
+      border: 1px solid #bfdbfe;
+    }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 18px;
+      padding: 26px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      margin-bottom: 20px;
+    }
+
+    /* ======================================================== */
+    /* ULTRA-CLEAR ARCHITECTURAL BLUEPRINT FLOWCHARTS */
+    /* ======================================================== */
+    .flow-stack {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin: 20px 0;
+    }
+
+    .flow-tier {
+      border: 2px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 18px 22px;
+      background: #ffffff;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.02);
+      position: relative;
+    }
+
+    .flow-tier.client-tier { border-color: #93c5fd; background: #f0f7ff; }
+    .flow-tier.frontend-tier { border-color: #6ee7b7; background: #f0fdf4; }
+    .flow-tier.backend-tier { border-color: #fde047; background: #fefce8; }
+    .flow-tier.data-tier { border-color: #c4b5fd; background: #faf5ff; }
+
+    .tier-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tier-title {
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .client-tier .tier-title { color: #0284c7; }
+    .frontend-tier .tier-title { color: #059669; }
+    .backend-tier .tier-title { color: #b45309; }
+    .data-tier .tier-title { color: #7c3aed; }
+
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+
+    .tier-node {
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      border-radius: 12px;
+      padding: 12px 16px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+    }
+
+    .tier-node h4 {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 3px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .tier-node p {
+      font-size: 12px;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    .flow-connector {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 4px 0;
+      color: #64748b;
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .flow-arrow-icon {
+      width: 26px;
+      height: 26px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+      color: #006ce6;
+      font-weight: 900;
+    }
+
+    /* ======================================================== */
+    /* CLEAR STEP-BY-STEP VISUAL SEQUENCE PIPELINES */
+    /* ======================================================== */
+    .timeline-pipeline {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin: 20px 0;
+    }
+
+    .timeline-step {
+      display: flex;
+      gap: 18px;
+      background: #ffffff;
+      border: 1px solid var(--border-color);
+      border-radius: 14px;
+      padding: 18px 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+      position: relative;
+    }
+
+    .timeline-step::before {
+      content: '';
+      position: absolute;
+      left: 36px;
+      bottom: -15px;
+      width: 2px;
+      height: 15px;
+      background: #cbd5e1;
+      z-index: 1;
+    }
+
+    .timeline-step:last-child::before {
+      display: none;
+    }
+
+    .step-badge {
+      width: 36px;
+      height: 36px;
+      background: var(--primary);
+      color: #ffffff;
+      font-weight: 900;
+      font-size: 15px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(0, 108, 230, 0.3);
+    }
+
+    .step-info {
+      flex: 1;
+    }
+
+    .step-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .step-title {
+      font-size: 15px;
+      font-weight: 800;
+      color: #0f172a;
+    }
+
+    .step-route-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: #f1f5f9;
+      color: #006ce6;
+      border: 1px solid #e2e8f0;
+    }
+
+    .step-desc {
+      font-size: 13px;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    /* Score breakdown cards */
+    .score-breakdown {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .score-card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px 16px;
+      text-align: center;
+    }
+
+    .score-percent {
+      font-size: 24px;
+      font-weight: 900;
+      color: var(--primary);
+      margin-bottom: 2px;
+    }
+
+    .score-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    /* Code Block Styling */
+    pre, code {
+      font-family: 'JetBrains Mono', monospace;
+    }
+
+    pre {
+      background: #0b192c;
+      color: #f8fafc;
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      overflow-x: auto;
+      margin: 12px 0;
+      line-height: 1.5;
+    }
+
+    code:not(pre code) {
+      background: #f1f5f9;
+      color: #2563eb;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    /* Tables */
+    table.data-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 13px;
+    }
+
+    table.data-table th, table.data-table td {
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+    }
+
+    table.data-table th {
+      background: #f8fafc;
+      font-weight: 700;
+      color: #475569;
+      text-transform: uppercase;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+    }
+
+    table.data-table tr:hover {
+      background-color: #f8fafc;
+    }
+
+    .action-bar {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+
+    .btn.primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 2px 8px rgba(0, 108, 230, 0.25);
+    }
+
+    .btn.primary:hover {
+      background: var(--primary-dark);
+    }
+
+    .btn.secondary {
+      background: #ffffff;
+      color: #334155;
+      border-color: var(--border-color);
+    }
+
+    .btn.secondary:hover {
+      background: #f8fafc;
+    }
+
+    @media print {
+      aside.sidebar { display: none; }
+      main.content { max-width: 100%; padding: 0; }
+      body { background: #ffffff; }
+      .card { border: none; box-shadow: none; padding: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar Navigation with India DITS Logo Theme -->
+  <aside class="sidebar">
+    <div class="brand-box">
+      <div class="brand-logo">ID</div>
+      <div class="brand-text">
+        <h1>India DITS</h1>
+        <p>Workflow Manual</p>
+      </div>
+    </div>
+
+    <nav class="toc">
+      <span class="nav-group">Overview</span>
+      <a href="#architecture" class="active">🏢 System Architecture</a>
+      
+      <span class="nav-group">Core Workflows</span>
+      <a href="#auth-flow">🔐 1. Authentication & Tokens</a>
+      <a href="#listing-flow">🏠 2. Property CRUD & Media</a>
+      <a href="#search-flow">⚡ 3. Feed Search & Indexing</a>
+      <a href="#similar-flow">🎯 4. Similar Properties Algorithm</a>
+      <a href="#lead-flow">👥 5. Lead Ingestion & CRM</a>
+      <a href="#seo-flow">🚀 6. SEO & 6h ISR Architecture</a>
+
+      <span class="nav-group">Reference</span>
+      <a href="#data-models">🗄️ Database Models</a>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="content">
+
+    <header class="doc-header">
+      <div class="badge-bar">
+        <span class="badge blue">Next.js 15 App Router</span>
+        <span class="badge green">Express 5 + Prisma ORM</span>
+        <span class="badge amber">PostgreSQL</span>
+        <span class="badge purple">Direct Owner Real Estate</span>
+      </div>
+      <h1 class="doc-title">System Workflows & Lifecycle Documentation</h1>
+      <p class="doc-subtitle">
+        Comprehensive end-to-end technical manual illustrating every user journey, data pipeline, indexing mechanism, and backend lifecycle with crystal-clear visual diagrams.
+      </p>
+
+      <div class="action-bar">
+        <a href="/api-docs" target="_blank" class="btn primary">
+          <span>📡 Open Swagger API Docs</span>
+        </a>
+        <a href="/" target="_blank" class="btn secondary">
+          <span>🏠 Go to Main Web App</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- SECTION 0: System Architecture -->
+    <section id="architecture" class="workflow-section">
+      <h2 class="section-heading">
+        <span class="num">0</span> High-Level Full-Stack System Architecture
+      </h2>
+
+      <div class="card">
+        <p style="font-size: 14px; color: #475569; margin-bottom: 20px;">
+          The system operates on a decoupled multi-tier architecture separating high-speed static rendering (SSR/ISR on Next.js 15) from authenticated transactional REST endpoints (Express.js + Prisma):
+        </p>
+
+        <!-- VISUAL TIER-BY-TIER BLUEPRINT -->
+        <div class="flow-stack">
+          
+          <!-- TIER 1: CLIENT -->
+          <div class="flow-tier client-tier">
+            <div class="tier-header">
+              <span class="tier-title">🌐 Tier 1: Client Devices & Consumers</span>
+              <span class="badge blue">HTTP / HTTPS</span>
+            </div>
+            <div class="tier-grid">
+              <div class="tier-node">
+                <h4>📱 Mobile Browser / PWA</h4>
+                <p>Responsive viewport, touch gesture gallery, WhatsApp intent integration.</p>
+              </div>
+              <div class="tier-node">
+                <h4>💻 Desktop Portal</h4>
+                <p>Grid search view, Owner CRM dashboard, Interactive Swagger UI.</p>
+              </div>
+              <div class="tier-node">
+                <h4>🕷️ Search Crawlers</h4>
+                <p>Googlebot, Bingbot parsing pre-rendered semantic HTML5 & JSON-LD.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONNECTOR -->
+          <div class="flow-connector">
+            <div class="flow-arrow-icon">↓</div>
+            <span>Port 3000 (Next.js SSR / ISR) &nbsp;&bull;&nbsp; Port 5000 (REST API /api)</span>
+            <div class="flow-arrow-icon">↓</div>
+          </div>
+
+          <!-- TIER 2: FRONTEND -->
+          <div class="flow-tier frontend-tier">
+            <div class="tier-header">
+              <span class="tier-title">⚡ Tier 2: Next.js 15 App Router Frontend</span>
+              <span class="badge green">SSR + ISR (6 Hours)</span>
+            </div>
+            <div class="tier-grid">
+              <div class="tier-node">
+                <h4>📄 Server Components (SSR/ISR)</h4>
+                <p>Pre-renders property landing pages with 6h stale-while-revalidate caching.</p>
+              </div>
+              <div class="tier-node">
+                <h4>🏷️ Dynamic SEO Engine</h4>
+                <p>Generates custom titles, meta tags, and Schema.org RealEstateListing JSON-LD.</p>
+              </div>
+              <div class="tier-node">
+                <h4>🧭 Dynamic Sitemap & Robots</h4>
+                <p>Auto-indexes all active properties across <code>/sitemap.xml</code> and <code>/robots.txt</code>.</p>
+              </div>
+              <div class="tier-node">
+                <h4>🖥️ Client UI Components</h4>
+                <p>Interactive feed filters, modal forms, photo reordering, and owner lead table.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONNECTOR -->
+          <div class="flow-connector">
+            <div class="flow-arrow-icon">↓</div>
+            <span>JSON REST Protocol (Bearer JWT & HttpOnly Cookies)</span>
+            <div class="flow-arrow-icon">↓</div>
+          </div>
+
+          <!-- TIER 3: BACKEND API -->
+          <div class="flow-tier backend-tier">
+            <div class="tier-header">
+              <span class="tier-title">⚙️ Tier 3: Express 5 Backend REST API</span>
+              <span class="badge amber">Port 5000</span>
+            </div>
+            <div class="tier-grid">
+              <div class="tier-node">
+                <h4>🛡️ Security Middleware</h4>
+                <p>Dual JWT token verification, CORS handling, and IP rate limiting.</p>
+              </div>
+              <div class="tier-node">
+                <h4>🎯 6 Domain Controllers</h4>
+                <p>Rent, Resale, PG, Commercial Rent/Sale, Land/Plot, and Support.</p>
+              </div>
+              <div class="tier-node">
+                <h4>⚡ Feed Aggregator Service</h4>
+                <p>Parallel multi-model pagination & 50k+ record index scanning.</p>
+              </div>
+              <div class="tier-node">
+                <h4>📁 Multer Media Pipeline</h4>
+                <p>Validates JPEG/PNG/WebP, enforces 5MB limit, saves to <code>/uploads</code>.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- CONNECTOR -->
+          <div class="flow-connector">
+            <div class="flow-arrow-icon">↓</div>
+            <span>Prisma Client (Connection Pool & Relational Cascades)</span>
+            <div class="flow-arrow-icon">↓</div>
+          </div>
+
+          <!-- TIER 4: DATABASE -->
+          <div class="flow-tier data-tier">
+            <div class="tier-header">
+              <span class="tier-title">🗄️ Tier 4: Storage & Database Persistence</span>
+              <span class="badge purple">PostgreSQL + Local CDN</span>
+            </div>
+            <div class="tier-grid">
+              <div class="tier-node">
+                <h4>🐘 PostgreSQL Database</h4>
+                <p>Normalized relational schema with compound B-Tree indexes & constraints.</p>
+              </div>
+              <div class="tier-node">
+                <h4>📸 Local Asset Storage</h4>
+                <p>Static media served at <code>/uploads/img/...</code> with immutable caching headers.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 1: Authentication Workflow -->
+    <section id="auth-flow" class="workflow-section">
+      <h2 class="section-heading">
+        <span class="num">1</span> Authentication & Dual-Token Lifecycle
+      </h2>
+
+      <div class="card">
+        <p style="font-size: 14px; color: #475569; margin-bottom: 16px;">
+          Dual-token strategy combining an ephemeral <strong>Access Token (15 mins)</strong> for request headers with a secure, rotated <strong>Refresh Token (7 days)</strong> in HttpOnly cookies:
+        </p>
+
+        <!-- VISUAL SEQUENCE TIMELINE -->
+        <div class="timeline-pipeline">
+          
+          <div class="timeline-step">
+            <div class="step-badge">1</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">User Enters Mobile Number</span>
+                <span class="step-route-tag">POST /api/auth/login</span>
+              </div>
+              <p class="step-desc">Visitor or Owner enters their 10-digit mobile number. No passwords required. API checks PostgreSQL for an existing profile.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-badge">2</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">Account Verification & Token Issuance</span>
+                <span class="step-route-tag">200 OK or 404 Auto-Register</span>
+              </div>
+              <p class="step-desc">If registered, server issues short-lived <strong>Access Token (15 min)</strong> + sets <strong>HttpOnly Refresh Cookie (7 days)</strong>. If new, user enters Name & Role to register.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-badge">3</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">Authenticated Request Execution</span>
+                <span class="step-route-tag">Authorization: Bearer &lt;token&gt;</span>
+              </div>
+              <p class="step-desc">Protected routes (Create Listing, Upload Photos, View Owner Leads) authenticate the user via JWT header middleware.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-badge">4</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">Seamless Token Rotation</span>
+                <span class="step-route-tag">POST /api/auth/refresh-token</span>
+              </div>
+              <p class="step-desc">When access token expires, client silently requests new token pair using HttpOnly cookie without interrupting user session.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2: Property Listing Workflow -->
+    <section id="listing-flow" class="workflow-section">
+      <h2 class="section-heading">
+        <span class="num">2</span> Property Listing & Media Upload Workflow
+      </h2>
+
+      <div class="card">
+        <p style="font-size: 14px; color: #475569; margin-bottom: 16px;">
+          Complete pipeline for creating listings across 6 categories and attaching high-resolution photo galleries:
+        </p>
+
+        <div class="timeline-pipeline">
+          
+          <div class="timeline-step">
+            <div class="step-badge">1</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">Owner Fills Property Specifications</span>
+                <span class="step-route-tag">POST /api/residential-rent</span>
+              </div>
+              <p class="step-desc">Selects category (Rent, Resale, PG, Commercial, Land). Form validates required fields (City, Locality, Rent/Price, BHK).</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-badge">2</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">Database Normalization & UUID Generation</span>
+                <span class="step-route-tag">Prisma ORM Insert</span>
+              </div>
+              <p class="step-desc">Record is saved to category table (e.g. <code>ResidentialRentProperty</code>) with <code>isActive: true</code> and unique UUIDv4.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-badge">3</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">Gallery Photo Upload (Up to 9 Photos)</span>
+                <span class="step-route-tag">POST /api/residential-rent/:id/photos</span>
+              </div>
+              <p class="step-desc">Multer checks file type (JPEG/PNG/WebP) and enforces 5MB max size per image. Photos are linked to property UUID.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-badge">4</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">Live in Search Feed & Owner CRM</span>
+                <span class="step-route-tag">201 Created</span>
+              </div>
+              <p class="step-desc">Listing is immediately discoverable in public feed and managed under "My Properties" with View, Edit, Reorder, and Delete actions.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3: Feed Search & Indexing -->
+    <section id="search-flow" class="workflow-section">
+      <h2 class="section-heading">
+        <span class="num">3</span> Search, Filtering & 50,000+ Records Indexing Pipeline
+      </h2>
+
+      <div class="card">
+        <p style="font-size: 14px; color: #475569; margin-bottom: 16px;">
+          Optimized for low-latency pagination across 50,000+ records using compound B-Tree indexes and parallel multi-model retrieval:
+        </p>
+
+        <div class="flow-stack">
+          <div class="flow-tier" style="border-color: #93c5fd; background: #ffffff;">
+            <div class="tier-header">
+              <span class="tier-title" style="color: #0284c7;">🔍 Step 1: User Adjusts Search Criteria</span>
+              <span class="badge blue">GET /api/feed?page=1&limit=10&city=Chennai...</span>
+            </div>
+            <p style="font-size: 13px; color: #64748b;">Parameters: Category (ALL/RENT/BUY/PG), City, Search Keyword, Min/Max Price, Sort Order (newest/price).</p>
+          </div>
+
+          <div class="flow-connector">
+            <div class="flow-arrow-icon">↓</div>
+            <span>Parallel Database Index Scans via Promise.all()</span>
+            <div class="flow-arrow-icon">↓</div>
+          </div>
+
+          <div class="tier-grid">
+            <div class="tier-node" style="border-left: 4px solid #006ce6;">
+              <h4>🏢 Rent Index Scan</h4>
+              <p>Uses <code>idx_rent_feed</code> on <code>[isActive, createdAt DESC]</code></p>
+            </div>
+            <div class="tier-node" style="border-left: 4px solid #10b981;">
+              <h4>🏡 Resale Index Scan</h4>
+              <p>Uses <code>idx_resale_feed</code> on <code>[isActive, createdAt DESC]</code></p>
+            </div>
+            <div class="tier-node" style="border-left: 4px solid #f59e0b;">
+              <h4>🛏️ PG / Hostel Scan</h4>
+              <p>Uses <code>idx_pg_feed</code> on <code>[isActive, createdAt DESC]</code></p>
+            </div>
+            <div class="tier-node" style="border-left: 4px solid #8b5cf6;">
+              <h4>🏪 Commercial / Plot</h4>
+              <p>Uses compound B-Tree indexes for sub-10ms query execution.</p>
+            </div>
+          </div>
+
+          <div class="flow-connector">
+            <div class="flow-arrow-icon">↓</div>
+            <span>Deterministic Slicing & Pagination Metadata</span>
+            <div class="flow-arrow-icon">↓</div>
+          </div>
+
+          <div class="flow-tier" style="border-color: #6ee7b7; background: #f0fdf4;">
+            <div class="tier-header">
+              <span class="tier-title" style="color: #059669;">⚡ Step 3: Fast JSON Response to Client</span>
+              <span class="badge green">HTTP 200 OK &bull; Payload &lt; 15KB</span>
+            </div>
+            <p style="font-size: 13px; color: #475569;">Returns unified array of 10 items + pagination object (<code>totalCount</code>, <code>totalPages</code>, <code>hasNextPage</code>).</p>
+          </div>
+        </div>
+
+        <h3 style="font-size: 14.5px; font-weight: 800; margin: 20px 0 8px;">PostgreSQL Compound Index Definitions</h3>
+        <pre><code>-- PostgreSQL Compound B-Tree Indexes for Instant Search
+CREATE INDEX "idx_rent_feed" ON "ResidentialRentProperty" ("isActive", "createdAt" DESC);
+CREATE INDEX "idx_rent_loc"  ON "ResidentialRentProperty" ("isActive", "city", "locality");
+CREATE INDEX "idx_rent_user" ON "ResidentialRentProperty" ("userId");
+CREATE INDEX "idx_photo_prop" ON "PropertyPhoto" ("propertyId");</code></pre>
+      </div>
+    </section>
+
+    <!-- SECTION 4: Similar Properties Algorithm -->
+    <section id="similar-flow" class="workflow-section">
+      <h2 class="section-heading">
+        <span class="num">4</span> Similar Properties Recommendation Engine
+      </h2>
+
+      <div class="card">
+        <p style="font-size: 14px; color: #475569; margin-bottom: 12px;">
+          Calculates recommendation affinity scores using a multi-attribute weighted proximity formula:
+        </p>
+
+        <div class="score-breakdown">
+          <div class="score-card">
+            <div class="score-percent">40%</div>
+            <div class="score-label">📍 Locality Match</div>
+          </div>
+          <div class="score-card">
+            <div class="score-percent">20%</div>
+            <div class="score-label">🏙️ City Match</div>
+          </div>
+          <div class="score-card">
+            <div class="score-percent">25%</div>
+            <div class="score-label">🛏️ Category & BHK Match</div>
+          </div>
+          <div class="score-card">
+            <div class="score-percent">15%</div>
+            <div class="score-label">💰 Price Proximity (±20%)</div>
+          </div>
+        </div>
+
+        <div style="background: #f1f5f9; padding: 14px 18px; border-radius: 12px; font-size: 13px; font-weight: 700; color: #1e293b; margin-top: 12px;">
+          Score = (0.40 × LocalityMatch) + (0.20 × CityMatch) + (0.25 × BHKMatch) + (0.15 × PriceProximity)
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5: Lead Capture & CRM Workflow -->
+    <section id="lead-flow" class="workflow-section">
+      <h2 class="section-heading">
+        <span class="num">5</span> Lead Capture & CRM Workflow
+      </h2>
+
+      <div class="card">
+        <p style="font-size: 14px; color: #475569; margin-bottom: 16px;">
+          End-to-end lifecycle for connecting interested tenants/buyers directly to owners with automatic 24-hour lead deduplication:
+        </p>
+
+        <div class="timeline-pipeline">
+          
+          <div class="timeline-step">
+            <div class="step-badge">1</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">Buyer Expresses Interest</span>
+                <span class="step-route-tag">Click "WhatsApp Owner" or "Call Owner"</span>
+              </div>
+              <p class="step-desc">Buyer triggers lead ingestion on the property landing page while viewing listing details and photos.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-badge">2</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">24-Hour Deduplication & Anti-Spam Check</span>
+                <span class="step-route-tag">POST /api/leads</span>
+              </div>
+              <p class="step-desc">Backend checks if the same user inquired on this property within the last 24 hours. If found, it updates the timestamp idempotently without duplicate alert spam.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-badge">3</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">Direct WhatsApp Bridge Launched</span>
+                <span class="step-route-tag">https://wa.me/&lt;owner_mobile&gt;</span>
+              </div>
+              <p class="step-desc">Opens WhatsApp Web / Mobile app pre-populated with property title, locality, and price for 100% direct owner communication with zero broker fees.</p>
+            </div>
+          </div>
+
+          <div class="timeline-step">
+            <div class="step-badge">4</div>
+            <div class="step-info">
+              <div class="step-header">
+                <span class="step-title">Owner CRM Dashboard Record</span>
+                <span class="step-route-tag">GET /api/leads/property/:propertyId</span>
+              </div>
+              <p class="step-desc">Owner sees verified buyer details (Name, Mobile, Timestamp) in their Owner Portal with customizable lead status (Interested, Contacted, Visited, Closed).</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 6: Production SEO & 6h ISR -->
+    <section id="seo-flow" class="workflow-section">
+      <h2 class="section-heading">
+        <span class="num">6</span> Production SEO & 6-Hour ISR Page Lifecycle
+      </h2>
+
+      <div class="card">
+        <p style="font-size: 14px; color: #475569; margin-bottom: 16px;">
+          Server-side rendering architecture with Next.js Incremental Static Regeneration (revalidated every 6 hours / 21,600s):
+        </p>
+
+        <div class="flow-stack">
+          <div class="flow-tier" style="border-color: #93c5fd; background: #ffffff;">
+            <div class="tier-header">
+              <span class="tier-title" style="color: #0284c7;">🕷️ Step 1: Crawler Requests Clean Slug URL</span>
+              <span class="badge blue">/property/[city]/[locality]/[slug]-[id]</span>
+            </div>
+            <p style="font-size: 13px; color: #64748b;">Search engines and visitors request clean canonical URLs with stripped tracking parameters.</p>
+          </div>
+
+          <div class="flow-connector">
+            <div class="flow-arrow-icon">↓</div>
+            <span>ISR Cache Check (6-Hour Expiry Window)</span>
+            <div class="flow-arrow-icon">↓</div>
+          </div>
+
+          <div class="tier-grid">
+            <div class="tier-node" style="border-left: 4px solid #10b981;">
+              <h4>⚡ Cache Hit (&lt; 6 Hours)</h4>
+              <p>Serves pre-rendered static HTML instantly with Time-To-First-Byte (TTFB) &lt; 50ms.</p>
+            </div>
+            <div class="tier-node" style="border-left: 4px solid #f59e0b;">
+              <h4>🔄 Cache Miss / Stale</h4>
+              <p>Runs server-side revalidation, queries Prisma, and updates cache in background.</p>
+            </div>
+          </div>
+
+          <div class="flow-connector">
+            <div class="flow-arrow-icon">↓</div>
+            <span>Metadata & Schema Injection</span>
+            <div class="flow-arrow-icon">↓</div>
+          </div>
+
+          <div class="flow-tier" style="border-color: #6ee7b7; background: #f0fdf4;">
+            <div class="tier-header">
+              <span class="tier-title" style="color: #059669;">🏷️ Step 3: Complete Schema.org JSON-LD Output</span>
+              <span class="badge green">RealEstateListing + BreadcrumbList + FAQPage</span>
+            </div>
+            <p style="font-size: 13px; color: #475569;">Includes price, currency, address, floorSize, photo URLs, owner name, and canonical tag for Google Rich Snippets.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 7: Database Models -->
+    <section id="data-models" class="workflow-section">
+      <h2 class="section-heading">
+        <span class="num">7</span> Core Relational Database Models
+      </h2>
+
+      <div class="card">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Table Name</th>
+              <th>Primary Key</th>
+              <th>Foreign Keys</th>
+              <th>Key Indexes</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>User</code></td>
+              <td><code>id (Int, Auto)</code></td>
+              <td>-</td>
+              <td><code>mobile (Unique), email (Unique)</code></td>
+            </tr>
+            <tr>
+              <td><code>ResidentialRentProperty</code></td>
+              <td><code>id (UUIDv4)</code></td>
+              <td><code>userId -> User.id</code></td>
+              <td><code>[isActive, createdAt], [isActive, city, locality]</code></td>
+            </tr>
+            <tr>
+              <td><code>ResidentialResaleProperty</code></td>
+              <td><code>id (UUIDv4)</code></td>
+              <td><code>userId -> User.id</code></td>
+              <td><code>[isActive, createdAt], [userId]</code></td>
+            </tr>
+            <tr>
+              <td><code>ResidentialPgProperty</code></td>
+              <td><code>id (UUIDv4)</code></td>
+              <td><code>userId -> User.id</code></td>
+              <td><code>[isActive, createdAt], [userId]</code></td>
+            </tr>
+            <tr>
+              <td><code>CommercialRentProperty</code></td>
+              <td><code>id (UUIDv4)</code></td>
+              <td><code>userId -> User.id</code></td>
+              <td><code>[isActive, createdAt], [userId]</code></td>
+            </tr>
+            <tr>
+              <td><code>CommercialSaleProperty</code></td>
+              <td><code>id (UUIDv4)</code></td>
+              <td><code>userId -> User.id</code></td>
+              <td><code>[isActive, createdAt], [userId]</code></td>
+            </tr>
+            <tr>
+              <td><code>LandPlotResaleProperty</code></td>
+              <td><code>id (UUIDv4)</code></td>
+              <td><code>userId -> User.id</code></td>
+              <td><code>[isActive, createdAt], [userId]</code></td>
+            </tr>
+            <tr>
+              <td><code>PropertyPhoto</code></td>
+              <td><code>id (UUIDv4)</code></td>
+              <td><code>propertyId -> Property.id</code></td>
+              <td><code>[propertyId]</code></td>
+            </tr>
+            <tr>
+              <td><code>PropertyLead</code></td>
+              <td><code>id (UUIDv4)</code></td>
+              <td><code>userId -> User.id</code></td>
+              <td><code>[propertyId], [userId]</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    // Active Sidebar TOC Highlighting on Scroll
+    const sections = document.querySelectorAll('section.workflow-section');
+    const navLinks = document.querySelectorAll('nav.toc a');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop - 100;
+        if (pageYOffset >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
